@@ -1,39 +1,57 @@
 <?php
 
-//この部分を外部ファイルに
+//そのうちこの部分を外部ファイルに
 $dsn = 'mysql:host=localhost;dbname=test;unix_socket=/tmp/mysql.sock';
 $username = 'ebara';
+
 $password = 'Ebara1965';
 
-//PDOでデータベースに接続（親クラスに）
-	try {
-	    $pdo = new PDO($dsn, $username, $password);
-	    print('接続成功');
-    }catch(PDOException $e){
-	    print('接続失敗'.$e->getMessage());
-    	die();
-    }
+//PDOでデータベースに接続（そのうち親クラスにする）
+try {
+	$pdo = new PDO($dsn, $username, $password);
+    print('接続成功');
+}catch(PDOException $e){
+    print('接続失敗'.$e->getMessage());
+   	die();
+}
     
-//（これを子クラスに）
-class DBConsole {
-	function DBSelect () {
-		$stmt = $pdo->query("SELECT * FROM sample");
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-    		echo $row;
+//（ここからしたを子クラスに）
+//selectして表示
+$stmt = $pdo->query("SELECT * FROM sample");
+while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+	echo $row['id'];
+	echo $row['body'];
+}
+//insert
+//値を入れてる
+
+
+$id = 4;
+$body = hoge4;
+//insert
+$stmt1 = $pdo->query("INSERT test(id,body) VALUES(:id, :body)");
+$stmt1 = bindValue(':id', PDO::PARAM_INT);
+$stmt1 = bindValue(':body', PDO::PARAM_STR);
+$stmt1->excute();
+
+echo $row['id'];
+echo $row['body'];
+
+
+
+
 //insert
 //update
 //delete
-        }
-	}
-}
 
-//insertのときに使う
-$ids = array(4,5,6);
-$bodys = array("hoge4", "hoge5", "hoge6");
+//	}
+//}
+
 
 //呼び出し
-$dbconsole = new DBConsole();
-$dbconsole->DBSelect();
+//$dbconsole = new DBConsole();
+//$dbconsole->DBSelect();
+
 
 ?>
 <html>
